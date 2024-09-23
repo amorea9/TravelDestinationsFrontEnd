@@ -4,36 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add your travel destination</title>
-    <script src="script.js" type="module"></script>
+    <script src="addDestination.js" type="module"></script>
     <script src="signIn.js" type="module"></script>
+    <script src="script.js" type="module"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header><h1>Add your travel destination</h1></header>
     <main>
       <!-- display when the user is signed in or logged in (logInStatus has to be true)  -->
-      <div id="addDestinationContainer">
-        <form id="addDestinationForm" class="hidden"></form>
-            <legend>Add a new destination</legend>
-            <div>
-              <input type="text" id="destinationTitle" placeholder="Title" required />
-            </div>
-            <div>
-              <input type="text" id="destinationDescription" placeholder="Description" required />
-            </div>
-            <div>
-                <input type="text" id="destinationImageUrl" placeholder="Image URL"  />
-              </div>
-              <div></div>
-                <input type="text" id="destinationWikiLink" placeholder="Wikipedia Link"  />
-              </div>
-              <div>
-                <input type="text" id="destinationTag" placeholder="Tag"  />
-              </div>
-            <div>
-              <input type="submit" value="Create now" />
-            </div>
-          </form>
+      <div id="addDestinationContainer" class="userAccessContainer">
+        <form id="addDestinationForm">
+          <legend>Add a new destination</legend>
+          <div>
+            <input type="text" id="destinationTitle" placeholder="Title" required />
+          </div>
+          <div>
+            <input type="text" id="destinationDescription" placeholder="Description" required />
+          </div>
+          <div>
+            <input type="text" id="destinationImageUrl" placeholder="Image URL" />
+          </div>
+          <div>
+            <input type="text" id="destinationWikiLink" placeholder="Wikipedia Link" />
+          </div>
+          <div>
+            <input type="text" id="destinationTag" placeholder="Tag" />
+          </div>
+          <div>
+            <input type="submit" value="Create now" />
+          </div>
+        </form>
       </div>
       <!-- display when user is NOT signed in (logInStatus is false)-->
       <div id="userAccessContainer" class="userAccessContainer">

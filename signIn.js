@@ -66,7 +66,7 @@ registerForm.addEventListener("submit", (e) => {
     user.logInStatus = true;
     console.log(user);
     //when all is good, we want to hide everything with user sign in or registration, and show the topics on the page
-    displayDestinations(user.logInStatus);
+    displayForm(user.logInStatus);
   }
 });
 
@@ -89,6 +89,6 @@ signInForm.addEventListener("submit", (e) => {
     user.lastLoggedIn = currentDate;
     alert(`User signed in. Welcome back ${user.username}!`);
     console.log(user);
-    displayDestinations(user.logInStatus);
+    displayForm(user.logInStatus);
   }
 });

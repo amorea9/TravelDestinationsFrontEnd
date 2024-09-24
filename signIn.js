@@ -2,14 +2,17 @@
 
 //global variables used by both events
 const registerButton = document.getElementById("registerButton");
-const signInButton = document.getElementById("signInButton");
+const addDestinationContainer = document.getElementById("addDestinationContainer");
+const userAccessContainer = document.getElementById("userAccessContainer");
 const registerForm = document.getElementById("registerForm");
 const signInForm = document.getElementById("signInForm");
 const signInContainer = document.getElementById("signInContainer");
 const registerContainer = document.getElementById("registerContainer");
-const destinationsContainer = document.getElementById("destinationsContainer");
-const userAccessContainer = document.getElementById("userAccessContainer");
+const signInMessage = document.getElementById("signInMessage");
+const registerMessage = document.getElementById("registerMessage");
 
+//variable to test login status for the user
+let isLoggedIn = false;
 const currentDate = new Date().toLocaleString([], {
   year: "numeric",
   month: "2-digit",
@@ -19,25 +22,18 @@ const currentDate = new Date().toLocaleString([], {
   second: undefined,
 });
 
-//const user = sharedObject.user;
-
-//depending if the user clicks on register or sign in, we hide or make visibile the correct form
-const displayForm = (buttonName) => {
-  console.log(buttonName);
-  if (buttonName === "signIn") {
-    signInForm.classList.remove("hidden");
-    signInButton.classList.add("hidden");
-    registerContainer.classList.add("hidden");
-  } else if (buttonName === "register") {
-    registerForm.classList.remove("hidden");
-    registerButton.classList.add("hidden");
-    signInContainer.classList.add("hidden");
-  }
+//depending if the user clicks on register or sign in, we hide or make visibile the correct forms
+const displayRegisterForm = () => {
+  signInMessage.classList.add("hidden");
+  registerMessage.classList.add("hidden");
+  registerForm.classList.remove("hidden");
+  registerButton.classList.add("hidden");
+  signInContainer.classList.add("hidden");
 };
 //listen for which button is clicked and show the right form
-registerButton.addEventListener("click", () => displayForm(registerButton.name));
-signInButton.addEventListener("click", () => displayForm(signInButton.name));
+registerButton.addEventListener("click", displayRegisterForm);
 
+//when register form is submitted
 registerForm.addEventListener("submit", (e) => {
   //avoid reloading the page
   e.preventDefault();
@@ -54,41 +50,61 @@ registerForm.addEventListener("submit", (e) => {
   } else if (!newUserEmail.includes("@") || !newUserEmail.includes(".")) {
     alert("This email address is invalid. Please make sure to enter a valid email address. Example: 'email@example.com'");
   } else {
-    alert(`User registered successfully. Welcome ${user.username}!`);
+    alert(`User registered successfully. Welcome ${username}!`);
     //POST request to create the user - createUser()
     //for the userId, we set it as the insertedId (generated automatically by MongoDB)
-    user.userId = ""; //insertedId - maybe we need a separate step for this one
-    user.mail = newUserEmail;
-    user.username = username;
-    user.password = newUserPassword;
-    user.createdOn = currentDate;
-    user.lastLoggedIn = currentDate;
-    user.logInStatus = true;
-    console.log(user);
-    //when all is good, we want to hide everything with user sign in or registration, and show the topics on the page
-    displayForm(user.logInStatus);
+    // user.userId = ""; //insertedId - maybe we need a separate step for this one
+    // user.mail = newUserEmail;
+    // user.username = username;
+    // user.password = newUserPassword;
+    // user.createdOn = currentDate;
+    // user.lastLoggedIn = currentDate;
+    // user.logInStatus = true;
+    // console.log(user);
+    isLoggedIn = true;
+    //when all is good and the user is registered, display the create a new destination form
+    displayCreateForm(isLoggedIn);
   }
 });
 
-//if user signs in
+//if user signs in - displayed by default
 signInForm.addEventListener("submit", (e) => {
   //avoid reloading the page
   e.preventDefault();
 
   const userEmail = document.getElementById("userEmail").value;
   const userPassword = document.getElementById("userPassword").value;
-  //const user = { mail: "", firstName: "", lastName: "", birthday: "", password: "" };
 
   if (userEmail === "" || userPassword === "") {
     alert("Please make sure you have entered all required fields.");
   }
   //GET request to get user. findUser() to retrieve information with an email check(ideally it would be done with JWtokens - a special encripted key). if the user email exists, sign them in and retrieve the user object
   else {
-    user.username = "Logged In user";
-    user.logInStatus = true;
-    user.lastLoggedIn = currentDate;
-    alert(`User signed in. Welcome back ${user.username}!`);
-    console.log(user);
-    displayForm(user.logInStatus);
+    // user.username = "Logged In user";
+    // user.logInStatus = true;
+    // user.lastLoggedIn = currentDate;
+    // alert(`User signed in. Welcome back ${user.username}!`);
+    // console.log(user);
+    isLoggedIn = true;
+    displayCreateForm(isLoggedIn);
   }
 });
+
+//on reload check if the user is still logged in?
+
+const displayCreateForm = (isLoggedIn) => {
+  console.log(isLoggedIn);
+  if (isLoggedIn === true) {
+    console.log(isLoggedIn);
+    addDestinationContainer.classList.remove("hidden");
+    addDestinationContainer.classList.add("userAccessContainer");
+    userAccessContainer.classList.remove("userAccessContainer");
+    userAccessContainer.classList.add("hidden");
+  } else if (isLoggedIn === false) {
+    console.log(isLoggedIn);
+    addDestinationContainer.classList.remove("userAccessContainer");
+    addDestinationContainer.classList.add("hidden");
+    userAccessContainer.classList.remove("hidden");
+  }
+};
+window.addEventListener("load", displayCreateForm(isLoggedIn));

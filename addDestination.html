@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add your travel destination</title>
-    <script src="addDestination.js" type="module"></script>
     <script src="signIn.js" type="module"></script>
-    <script src="script.js" type="module"></script>
+    <!-- <script src="script.js" type="module"></script> -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -36,14 +35,14 @@
           </div>
         </form>
       </div>
+
       <!-- display when user is NOT signed in (logInStatus is false)-->
       <div id="userAccessContainer" class="userAccessContainer">
         <div>
-          <p>Please sign in or register your account to add a new destination</p>
+          <p id="signInMessage">Please sign in to add a new destination</p>
         </div>
         <div id="signInContainer">
-          <button id="signInButton" name="signIn">Sign in</button>
-          <form id="signInForm" class="hidden">
+          <form id="signInForm">
             <legend>Sign in</legend>
             <div>
               <input type="email" id="userEmail" placeholder="Email" required />
@@ -57,7 +56,8 @@
           </form>
         </div>
         <div id="registerContainer">
-          <button id="registerButton" name="register">Register</button>
+          <p id="registerMessage">Don't have an account?</p>
+          <button id="registerButton" name="register">Register now</button>
           <form id="registerForm" class="hidden">
             <legend>Register your account</legend>
             <div>

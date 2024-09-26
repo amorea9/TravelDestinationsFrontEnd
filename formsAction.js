@@ -1,18 +1,18 @@
 //import users and destinations here
-
+import { checkLoginStatus } from "./script.js";
 //global variables used by both events
 const registerButton = document.getElementById("registerButton");
 const addDestinationContainer = document.getElementById("addDestinationContainer");
 const userAccessContainer = document.getElementById("userAccessContainer");
 const registerForm = document.getElementById("registerForm");
 const signInForm = document.getElementById("signInForm");
+const addDestinationForm = document.getElementById("addDestinationForm");
 const signInContainer = document.getElementById("signInContainer");
-const registerContainer = document.getElementById("registerContainer");
 const signInMessage = document.getElementById("signInMessage");
 const registerMessage = document.getElementById("registerMessage");
 
-//variable to test login status for the user
-let isLoggedIn = false;
+const currentUserLogin = (await checkLoginStatus()) || false;
+
 const currentDate = new Date().toLocaleString([], {
   year: "numeric",
   month: "2-digit",
@@ -22,7 +22,7 @@ const currentDate = new Date().toLocaleString([], {
   second: undefined,
 });
 
-//depending if the user clicks on register or sign in, we hide or make visibile the correct forms
+//if the user clicks on the register button, we hide the mssages hinting at signing in or register
 const displayRegisterForm = () => {
   signInMessage.classList.add("hidden");
   registerMessage.classList.add("hidden");
@@ -30,11 +30,12 @@ const displayRegisterForm = () => {
   registerButton.classList.add("hidden");
   signInContainer.classList.add("hidden");
 };
-//listen for which button is clicked and show the right form
+//listen for register button
 registerButton.addEventListener("click", displayRegisterForm);
 
-//when register form is submitted
-registerForm.addEventListener("submit", (e) => {
+const registerUser = async (e) => {
+  //clear local storage to make sure this doesn't cause troubles
+  localStorage.clear();
   //avoid reloading the page
   e.preventDefault();
   //read input values
@@ -52,59 +53,124 @@ registerForm.addEventListener("submit", (e) => {
   } else {
     alert(`User registered successfully. Welcome ${username}!`);
     //POST request to create the user - createUser()
-    //for the userId, we set it as the insertedId (generated automatically by MongoDB)
-    // user.userId = ""; //insertedId - maybe we need a separate step for this one
-    // user.mail = newUserEmail;
-    // user.username = username;
-    // user.password = newUserPassword;
-    // user.createdOn = currentDate;
-    // user.lastLoggedIn = currentDate;
-    // user.logInStatus = true;
-    // console.log(user);
-    isLoggedIn = true;
+    const userPayload = {
+      userName: username,
+      hashedPassword: newUserPassword,
+      email: newUserEmail,
+      cretedOn: currentDate,
+      lastLoggedIn: currentDate,
+      isLoggedIn: true,
+      destinations: [],
+    };
+    const registeredUser = await createNewUser(userPayload);
+    //update local storage with user email and login status
+    localStorage.setItem("currentUser", JSON.stringify({ isLoggedIn: registeredUser.isLoggedIn, email: registeredUser.email }));
     //when all is good and the user is registered, display the create a new destination form
-    displayCreateForm(isLoggedIn);
+    displayCreateForm(true);
   }
-});
+};
 
-//if user signs in - displayed by default
-signInForm.addEventListener("submit", (e) => {
+const createNewUser = async (userPayload) => {
+  //send request to backend using the endpoint for users
+  const response = await fetch("http://localhost:3000/api/users", {
+    method: "POST",
+    body: JSON.stringify(userPayload),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const registeredUser = await response.json();
+  console.log("registeredUser", registeredUser);
+  return registeredUser;
+};
+
+const signInUser = async (e) => {
+  localStorage.clear();
   //avoid reloading the page
   e.preventDefault();
-
   const userEmail = document.getElementById("userEmail").value;
   const userPassword = document.getElementById("userPassword").value;
-
   if (userEmail === "" || userPassword === "") {
     alert("Please make sure you have entered all required fields.");
+  } else {
+    //POST to authenticate user
+    const credentials = { email: userEmail, password: userPassword };
+    const authenticatedUser = await authenticateUser(credentials);
+    alert(`You are now signed in. Welcome back ${authenticatedUser.user.userName}!`);
+    localStorage.setItem("currentUser", JSON.stringify({ isLoggedIn: authenticatedUser.user.isLoggedIn, email: authenticatedUser.user.email }));
+    displayCreateForm(true);
   }
-  //GET request to get user. findUser() to retrieve information with an email check(ideally it would be done with JWtokens - a special encripted key). if the user email exists, sign them in and retrieve the user object
-  else {
-    // user.username = "Logged In user";
-    // user.logInStatus = true;
-    // user.lastLoggedIn = currentDate;
-    // alert(`User signed in. Welcome back ${user.username}!`);
-    // console.log(user);
-    isLoggedIn = true;
-    displayCreateForm(isLoggedIn);
-  }
-});
+};
 
-//on reload check if the user is still logged in?
+const authenticateUser = async (credentials) => {
+  const response = await fetch("http://localhost:3000/api/users/authentication", {
+    method: "POST",
+    body: JSON.stringify(credentials),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const authenticatedUser = await response.json();
+  console.log("authenticatedUser", authenticatedUser);
+  return authenticatedUser;
+};
 
-const displayCreateForm = (isLoggedIn) => {
-  console.log(isLoggedIn);
-  if (isLoggedIn === true) {
-    console.log(isLoggedIn);
+const addDestination = async (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("destinationTitle").value;
+  const description = document.getElementById("destinationDescription").value;
+  const imageURL = document.getElementById("destinationImageUrl").value;
+  const wikiLink = document.getElementById("destinationWikiLink").value;
+  const tag = document.getElementById("destinationTag").value;
+
+  const destinationPayload = {
+    title: title,
+    description: description,
+    image: imageURL,
+    link: wikiLink,
+    tag: tag,
+  };
+
+  const createdDestination = await createDestination(destinationPayload);
+  alert(`${createdDestination.title} has been added to the list of destinations!`);
+  return createdDestination;
+};
+
+const createDestination = async (destinationPayload) => {
+  const currentUserObject = localStorage.getItem("currentUser");
+  const currentUser = JSON.parse(currentUserObject);
+
+  const response = await fetch(`http://localhost:3000/api/destinations/users/${currentUser.email}`, {
+    method: "POST",
+    body: JSON.stringify(destinationPayload),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const createdDestination = await response.json();
+  console.log("createdDestination", createdDestination);
+  return createdDestination;
+};
+
+//when register form is submitted
+registerForm.addEventListener("submit", (e) => registerUser(e));
+//if user signs in - displayed by default
+signInForm.addEventListener("submit", (e) => signInUser(e));
+//when the user clicks on create new destination
+addDestinationForm.addEventListener("submit", (e) => addDestination(e));
+//on reload check if the user is still logged in
+const displayCreateForm = async (currentUserLogin) => {
+  if (currentUserLogin === true) {
+    console.log(currentUserLogin);
     addDestinationContainer.classList.remove("hidden");
     addDestinationContainer.classList.add("formContainer");
     userAccessContainer.classList.remove("formContainer");
     userAccessContainer.classList.add("hidden");
-  } else if (isLoggedIn === false) {
-    console.log(isLoggedIn);
+  } else if (currentUserLogin === false) {
     addDestinationContainer.classList.remove("formContainer");
     addDestinationContainer.classList.add("hidden");
     userAccessContainer.classList.remove("hidden");
   }
 };
-window.addEventListener("load", displayCreateForm(isLoggedIn));
+window.addEventListener("load", () => displayCreateForm(currentUserLogin));

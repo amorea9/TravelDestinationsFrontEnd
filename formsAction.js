@@ -97,12 +97,12 @@ const displayCreateForm = (isLoggedIn) => {
   if (isLoggedIn === true) {
     console.log(isLoggedIn);
     addDestinationContainer.classList.remove("hidden");
-    addDestinationContainer.classList.add("userAccessContainer");
-    userAccessContainer.classList.remove("userAccessContainer");
+    addDestinationContainer.classList.add("formContainer");
+    userAccessContainer.classList.remove("formContainer");
     userAccessContainer.classList.add("hidden");
   } else if (isLoggedIn === false) {
     console.log(isLoggedIn);
-    addDestinationContainer.classList.remove("userAccessContainer");
+    addDestinationContainer.classList.remove("formContainer");
     addDestinationContainer.classList.add("hidden");
     userAccessContainer.classList.remove("hidden");
   }

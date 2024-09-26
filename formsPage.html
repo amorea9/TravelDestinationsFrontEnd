@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add your travel destination</title>
-    <script src="signIn.js" type="module"></script>
+    <script src="formsAction.js" type="module"></script>
     <!-- <script src="script.js" type="module"></script> -->
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -12,7 +12,7 @@
     <header><h1>Add your travel destination</h1></header>
     <main>
       <!-- display when the user is signed in or logged in (logInStatus has to be true)  -->
-      <div id="addDestinationContainer" class="userAccessContainer">
+      <div id="addDestinationContainer" class="formContainer">
         <form id="addDestinationForm">
           <legend>Add a new destination</legend>
           <div>
@@ -37,7 +37,7 @@
       </div>
 
       <!-- display when user is NOT signed in (logInStatus is false)-->
-      <div id="userAccessContainer" class="userAccessContainer">
+      <div id="userAccessContainer" class="formContainer">
         <div>
           <p id="signInMessage">Please sign in to add a new destination</p>
         </div>

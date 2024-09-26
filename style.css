@@ -51,7 +51,7 @@ form > div > input {
 form > div > input:not([type="submit"]) {
   border: none;
 }
-.userAccessContainer {
+.formContainer {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

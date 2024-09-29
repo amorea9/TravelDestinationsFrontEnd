@@ -10,8 +10,9 @@ const addDestinationForm = document.getElementById("addDestinationForm");
 const signInContainer = document.getElementById("signInContainer");
 const signInMessage = document.getElementById("signInMessage");
 const registerMessage = document.getElementById("registerMessage");
-
+const mainElement = document.querySelector('main');
 const currentUserLogin = (await checkLoginStatus()) || false;
+
 
 const currentDate = new Date().toLocaleString([], {
   year: "numeric",
@@ -22,6 +23,24 @@ const currentDate = new Date().toLocaleString([], {
   second: undefined,
 });
 
+/*Function to hide the background when forms are displayed
+const hideBackground = () => {
+  mainElement.classList.add("background-hidden"); 
+};
+
+Function to restore the background and hide forms
+const hideForms = () => {
+  // Hide the form and reset the display state
+  registerForm.classList.add("hidden");
+  registerButton.classList.remove("hidden");
+  signInContainer.classList.remove("hidden");
+
+  // Restore the background image by removing the class
+  mainElement.classList.remove("background-hidden");
+};
+*/
+
+
 //if the user clicks on the register button, we hide the mssages hinting at signing in or register
 const displayRegisterForm = () => {
   signInMessage.classList.add("hidden");
@@ -29,6 +48,7 @@ const displayRegisterForm = () => {
   registerForm.classList.remove("hidden");
   registerButton.classList.add("hidden");
   signInContainer.classList.add("hidden");
+  mainElement.classList.add('background-hidden');
 };
 //listen for register button
 registerButton.addEventListener("click", displayRegisterForm);

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 :root {
   --primary-color: #E8451F; /* Orange */
   --primary-color-light: #d43714; /* Light orange for hover and small details */
@@ -366,8 +368,8 @@ display: block;
 body {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
-  text-align: center;
+  margin: 0;
+  font-family: "Inter", sans-serif;
 }
 img {
   width: 300px;
@@ -376,50 +378,30 @@ img {
 }
 
 button {
+  width: 100%;
   background-color: white;
-  padding: 0.7rem 1.8rem;
-  border: 2px solid rgb(29, 90, 164);
+  padding: 8px 10px;
+  border: 1.8px solid #e8451f;
   border-radius: 8px;
-  color: rgb(29, 90, 164);
-  font-size: 1rem;
-  font-weight: 500;
-  transition: all 400ms ease-in-out;
+  color: #e8451f;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 150ms ease;
+  box-sizing: border-box;
 }
 button:hover {
-  border: 2px solid transparent;
   cursor: pointer;
-  background-color: rgb(229, 225, 255);
+  color: white;
+  background-color: #e8451f;
 }
-*/
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  background-color: aliceblue;
-  padding: 1rem;
-  border-radius: 8px;
-  max-width: 14rem;
+legend {
+  font-size: larger;
+  font-weight: 700;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
-form > div {
-  min-width: 100%;
-}
-form > div > input {
-  min-width: 100%;
-}
-form > div > input:not([type="submit"]) {
-  border: none;
-}
-.formContainer {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 30rem;
-  gap: 2rem;
-  justify-content: space-around;
-  align-content: center;
-  margin: auto;
-}
+
 #destinationsContainer > div {
   display: flex;
   flex-direction: column;
@@ -443,4 +425,135 @@ form > div > input:not([type="submit"]) {
 }
 #destinationsContainer > div > a {
   margin-top: auto;
+}
+
+/* login page */
+
+#main-form-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+#form-section {
+  flex: 1;
+  margin-left: 4rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: baseline;
+}
+
+#image-section {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#signInForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-radius: 8px;
+  max-width: 22rem;
+  align-items: baseline;
+}
+
+#signInMessage {
+  font-style: italic;
+  font-weight: 700;
+  color: #e8451f;
+  font-size: 14px;
+}
+
+/* Input styling */
+input {
+  border: 0;
+  outline: 0;
+  color: rgb(60, 66, 87);
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px,
+    rgb(60 66 87 / 16%) 0px 0px 0px 1px;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 8px 12px;
+  min-height: 34px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Input focus styling */
+input:focus {
+  box-shadow: rgb(60 66 87 / 16%) 0px 0px 0px 1px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+input::placeholder {
+  color: #888;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+form > div {
+  min-width: 100%;
+}
+
+form > div > input,
+form > div > button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 20rem;
+  gap: 2rem;
+}
+
+.login-button {
+  width: 100%;
+}
+
+#registerButton {
+  padding: 0;
+  border: 0;
+  transition: none;
+  width: 7rem;
+  font-size: 1rem;
+  text-decoration: underline;
+}
+
+#registerButton:hover {
+  background-color: white;
+  color: #e8451f;
+}
+
+.register-message-container {
+  display: flex;
+  width: 100%;
 }
